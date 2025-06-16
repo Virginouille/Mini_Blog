@@ -14,8 +14,15 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "title", nullable = false, length = 50)
     private String title;
+
+    @Column(name = "content", nullable = false, length = 500)
     private String content;
-    private String author;
+
+    @Column (name= "author_id", nullable = false)
+    private Long authorId;
+
+    @Column(name = "published", nullable = false)
     private LocalDateTime published;
 }
