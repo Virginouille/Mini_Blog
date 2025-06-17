@@ -3,9 +3,11 @@ package com.mini.blog.service;
 import com.mini.blog.model.Article;
 import com.mini.blog.model.Utilisateurs;
 import com.mini.blog.repository.ArticleRepository;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,15 +21,29 @@ public class ArticleService {
 
     //Méthode quand utilisateur est un auteur
     /**Méthode pour la création d'un article*/
-    public Article createArticle(String title, String content, Utilisateurs author, LocalDate publicationDate) {
-        Article article = new Article();
+    public Article createArticle(Article article) {
 
-        article.setTitle(title);
-        article.setContent(content);
+        if (article.getTitle() == null || article.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("The title cannot be empty");
+        }
 
-        article.setAuthorId(author.getId());
+        if (article.getContent() == null || article.getContent().trim().isEmpty()) {
+            throw new IllegalArgumentException("The content cannot be empty");
+        }
 
-        article.setPublished(publicationDate.atStartOfDay());
+        if (article.getPublished() == null) {
+            article.setPublished(LocalDateTime.now());
+        }
+
+        if(article.getAuthorId() == null){
+            Utilisateurs currentUser = getCurrentAutheticatedUser();
+            if (currentUser != null) {
+                article.setAuthorId(currentUser.getId());
+
+            } else {
+                throw new IllegalArgumentException("Unable to create an article without an author");
+            }
+        }
 
         return articleRepository.save(article);
 
