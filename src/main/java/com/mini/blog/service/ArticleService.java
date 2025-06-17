@@ -6,6 +6,7 @@ import com.mini.blog.repository.ArticleRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ArticleService {
@@ -43,8 +44,18 @@ public class ArticleService {
 
         return articleRepository.save(existingArticle);
     }
-    /**Méthode pour supprimer un article*/
 
-    //Quand l'utilisateur est un lecteur
-    //Quand l'utilisateur est un admin
+    /**Méthode pour supprimer un article*/
+    public void deleteArticle(Long idArticle) {
+        Article existingArticle = articleRepository.findById(idArticle)
+                .orElseThrow(() -> new IllegalArgumentException("Article with id : " + idArticle + " not found"));
+
+        articleRepository.delete(existingArticle);
+    }
+
+    /**Méthode pour récupérer tous les articles*/
+    public List<Article> getAllArticles() {
+        return articleRepository.findAll();
+    }
+
 }
