@@ -17,6 +17,7 @@ public class ArticleService {
     }
 
     //Méthode quand utilisateur est un auteur
+    /**Méthode pour la création d'un article*/
     public Article createArticle(String title, String content, Utilisateurs author, LocalDate publicationDate) {
         Article article = new Article();
 
@@ -30,4 +31,20 @@ public class ArticleService {
         return articleRepository.save(article);
 
     }
+
+    /**Méthode pour la modification d'un article*/
+    public Article modifyArticle(Long idArticle, String title, String content) {
+
+        Article existingArticle = articleRepository.findById(idArticle)
+                .orElseThrow(() -> new IllegalArgumentException("Article with id : " + idArticle + " not found"));
+
+        existingArticle.setTitle(title);
+        existingArticle.setContent(content);
+
+        return articleRepository.save(existingArticle);
+    }
+    /**Méthode pour supprimer un article*/
+
+    //Quand l'utilisateur est un lecteur
+    //Quand l'utilisateur est un admin
 }
